@@ -1,0 +1,88 @@
+defmodule BooksApiElixirWeb.AuthorControllerTest do
+  use BooksApiElixirWeb.ConnCase
+
+  import BooksApiElixir.AuthorsFixtures
+
+  alias BooksApiElixir.Authors.Author
+
+  @create_attrs %{
+    name: "some name",
+    biography: "some biography"
+  }
+  @update_attrs %{
+    name: "some updated name",
+    biography: "some updated biography"
+  }
+  @invalid_attrs %{name: nil, biography: nil}
+
+  setup %{conn: conn} do
+    {:ok, conn: put_req_header(conn, "accept", "application/json")}
+  end
+
+  describe "index" do
+    test "lists all author", %{conn: conn} do
+      conn = get(conn, ~p"/api/author")
+      assert json_response(conn, 200)["data"] == []
+    end
+  end
+
+  describe "create author" do
+    test "renders author when data is valid", %{conn: conn} do
+      conn = post(conn, ~p"/api/author", author: @create_attrs)
+      assert %{"id" => id} = json_response(conn, 201)["data"]
+
+      conn = get(conn, ~p"/api/author/#{id}")
+
+      assert %{
+               "id" => ^id,
+               "biography" => "some biography",
+               "name" => "some name"
+             } = json_response(conn, 200)["data"]
+    end
+
+    test "renders errors when data is invalid", %{conn: conn} do
+      conn = post(conn, ~p"/api/author", author: @invalid_attrs)
+      assert json_response(conn, 422)["errors"] != %{}
+    end
+  end
+
+  describe "update author" do
+    setup [:create_author]
+
+    test "renders author when data is valid", %{conn: conn, author: %Author{id: id} = author} do
+      conn = put(conn, ~p"/api/author/#{author}", author: @update_attrs)
+      assert %{"id" => ^id} = json_response(conn, 200)["data"]
+
+      conn = get(conn, ~p"/api/author/#{id}")
+
+      assert %{
+               "id" => ^id,
+               "biography" => "some updated biography",
+               "name" => "some updated name"
+             } = json_response(conn, 200)["data"]
+    end
+
+    test "renders errors when data is invalid", %{conn: conn, author: author} do
+      conn = put(conn, ~p"/api/author/#{author}", author: @invalid_attrs)
+      assert json_response(conn, 422)["errors"] != %{}
+    end
+  end
+
+  describe "delete author" do
+    setup [:create_author]
+
+    test "deletes chosen author", %{conn: conn, author: author} do
+      conn = delete(conn, ~p"/api/author/#{author}")
+      assert response(conn, 204)
+
+      assert_error_sent 404, fn ->
+        get(conn, ~p"/api/author/#{author}")
+      end
+    end
+  end
+
+  defp create_author(_) do
+    author = author_fixture()
+    %{author: author}
+  end
+end
