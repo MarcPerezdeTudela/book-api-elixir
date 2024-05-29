@@ -16,6 +16,7 @@ defmodule BooksApiElixir.Books.Book do
   def changeset(book, attrs) do
     book
     |> cast(attrs, [:author_id, :title, :page_number])
+    |> foreign_key_constraint(:author_id)
     |> validate_required([:author_id, :title])
     |> validate_length(:title, min: 1, max: 100)
     |> validate_number(:page_number, greater_than: 0)

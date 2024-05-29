@@ -17,5 +17,8 @@ defmodule BooksApiElixir.Authors.Author do
     authors
     |> cast(attrs, [:name, :biography])
     |> validate_required([:name])
+    |> validate_length(:name, min: 3, max: 100)
+    |> unique_constraint(:name)
+    |> validate_length(:biography, max: 3000)
   end
 end
