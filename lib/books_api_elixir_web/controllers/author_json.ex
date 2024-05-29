@@ -4,8 +4,8 @@ defmodule BooksApiElixirWeb.AuthorJSON do
   @doc """
   Renders a list of author.
   """
-  def index(%{author: author}) do
-    %{data: for(author <- author, do: data(author))}
+  def index(%{authors: authors}) do
+    %{data: for(author <- authors, do: data(author))}
   end
 
   @doc """
