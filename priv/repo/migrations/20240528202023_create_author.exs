@@ -4,7 +4,7 @@ defmodule BooksApiElixir.Repo.Migrations.CreateAuthor do
   def change do
     create table(:authors, primary_key: false) do
       add :id, :binary_id, primary_key: true
-      add :name, :string
+      add :name, :string, null: false
       add :biography, :text
 
       timestamps(type: :utc_datetime)

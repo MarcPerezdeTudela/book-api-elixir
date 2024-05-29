@@ -4,7 +4,7 @@ defmodule BooksApiElixir.Repo.Migrations.CreateBooks do
   def change do
     create table(:books, primary_key: false) do
       add :id, :binary_id, primary_key: true
-      add :title, :string
+      add :title, :string, null: false
       add :page_number, :integer
 
       timestamps(type: :utc_datetime)
