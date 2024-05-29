@@ -19,7 +19,8 @@ defmodule BooksApiElixirWeb.BookJSON do
     %{
       id: book.id,
       title: book.title,
-      page_number: book.page_number
+      page_number: book.page_number,
+      author_id: book.author_id
     }
   end
 end
