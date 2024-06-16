@@ -7,12 +7,17 @@ defmodule BooksApiElixir.BooksFixtures do
   @doc """
   Generate a book.
   """
+  import BooksApiElixir.AuthorsFixtures
+
   def book_fixture(attrs \\ %{}) do
+    author = author_fixture()
+
     {:ok, book} =
       attrs
       |> Enum.into(%{
         page_number: 42,
-        title: "some title"
+        title: "some title",
+        author_id: author.id
       })
       |> BooksApiElixir.Books.create_book()
 

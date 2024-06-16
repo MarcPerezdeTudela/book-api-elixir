@@ -7,6 +7,7 @@ defmodule BooksApiElixir.BooksTest do
     alias BooksApiElixir.Books.Book
 
     import BooksApiElixir.BooksFixtures
+    import BooksApiElixir.AuthorsFixtures
 
     @invalid_attrs %{title: nil, page_number: nil}
 
@@ -21,7 +22,8 @@ defmodule BooksApiElixir.BooksTest do
     end
 
     test "create_book/1 with valid data creates a book" do
-      valid_attrs = %{title: "some title", page_number: 42}
+      author = author_fixture()
+      valid_attrs = %{title: "some title", page_number: 42, author_id: author.id}
 
       assert {:ok, %Book{} = book} = Books.create_book(valid_attrs)
       assert book.title == "some title"

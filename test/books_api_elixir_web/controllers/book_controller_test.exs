@@ -7,7 +7,8 @@ defmodule BooksApiElixirWeb.BookControllerTest do
 
   @create_attrs %{
     title: "some title",
-    page_number: 42
+    page_number: 42,
+    author_id: "some author id"
   }
   @update_attrs %{
     title: "some updated title",

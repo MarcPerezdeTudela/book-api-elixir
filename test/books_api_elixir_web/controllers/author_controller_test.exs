@@ -21,17 +21,17 @@ defmodule BooksApiElixirWeb.AuthorControllerTest do
 
   describe "index" do
     test "lists all author", %{conn: conn} do
-      conn = get(conn, ~p"/api/author")
+      conn = get(conn, ~p"/api/authors")
       assert json_response(conn, 200)["data"] == []
     end
   end
 
   describe "create author" do
     test "renders author when data is valid", %{conn: conn} do
-      conn = post(conn, ~p"/api/author", author: @create_attrs)
+      conn = post(conn, ~p"/api/authors", author: @create_attrs)
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
-      conn = get(conn, ~p"/api/author/#{id}")
+      conn = get(conn, ~p"/api/authors/#{id}")
 
       assert %{
                "id" => ^id,
@@ -41,7 +41,7 @@ defmodule BooksApiElixirWeb.AuthorControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
-      conn = post(conn, ~p"/api/author", author: @invalid_attrs)
+      conn = post(conn, ~p"/api/authors", author: @invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
@@ -50,10 +50,10 @@ defmodule BooksApiElixirWeb.AuthorControllerTest do
     setup [:create_author]
 
     test "renders author when data is valid", %{conn: conn, author: %Author{id: id} = author} do
-      conn = put(conn, ~p"/api/author/#{author}", author: @update_attrs)
+      conn = put(conn, ~p"/api/authors/#{author}", author: @update_attrs)
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
 
-      conn = get(conn, ~p"/api/author/#{id}")
+      conn = get(conn, ~p"/api/authors/#{id}")
 
       assert %{
                "id" => ^id,
@@ -63,7 +63,7 @@ defmodule BooksApiElixirWeb.AuthorControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn, author: author} do
-      conn = put(conn, ~p"/api/author/#{author}", author: @invalid_attrs)
+      conn = put(conn, ~p"/api/authors/#{author}", author: @invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
@@ -72,11 +72,11 @@ defmodule BooksApiElixirWeb.AuthorControllerTest do
     setup [:create_author]
 
     test "deletes chosen author", %{conn: conn, author: author} do
-      conn = delete(conn, ~p"/api/author/#{author}")
+      conn = delete(conn, ~p"/api/authors/#{author}")
       assert response(conn, 204)
 
       assert_error_sent 404, fn ->
-        get(conn, ~p"/api/author/#{author}")
+        get(conn, ~p"/api/authors/#{author}")
       end
     end
   end
